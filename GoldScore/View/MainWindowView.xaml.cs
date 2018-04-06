@@ -79,6 +79,8 @@ namespace GoldScore.View
 
         private async void GoButtonClicked(object sender, RoutedEventArgs e)
         {
+            GoButton.IsEnabled = false;
+
             var config = _mainWindowController.GetCurrentConfig();
 
             var tsmApiKey = TsmKeyTextBox.Text;
@@ -122,6 +124,8 @@ namespace GoldScore.View
                 StatusLabel.Content = "Something went wrong. Check your input for TSM API Key and Realm and try again.";
                 StatusLabel.Foreground = Brushes.Red;
             }
+
+            GoButton.IsEnabled = true;
         }
 
 
