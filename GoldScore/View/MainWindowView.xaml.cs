@@ -22,6 +22,9 @@
  * SOFTWARE.
  */
 
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Input;
 using GoldScore.Controller;
 
 namespace GoldScore.View
@@ -32,7 +35,11 @@ namespace GoldScore.View
     /// </summary>
     public partial class MainWindowView : IMainWindowView
     {
-        private MainWindowController _mainWindowController;
+        private readonly MainWindowController _mainWindowController;
+
+        private static string _colorGrey = "#FF818181";
+        private static string _colorError = "#FFF01E1E";
+        private static string _colorSuccess = "#FF176C36";
 
         /// <inheritdoc />
         /// <summary>
@@ -43,6 +50,44 @@ namespace GoldScore.View
             InitializeComponent();
 
             _mainWindowController = new MainWindowController(this);
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            var config = _mainWindowController.GetCurrentConfig();
+
+            TsmKeyTextBox.Text = config.TsmApiKey;
+
+            if (config.Region.Equals("EU") && !config.Region.Equals("US"))
+            {
+                EuRadioButton.IsChecked = true;
+                UsRadioButton.IsChecked = false;
+            }
+            else if (!config.Region.Equals("EU") && config.Region.Equals("US"))
+            {
+                EuRadioButton.IsChecked = false;
+                UsRadioButton.IsChecked = true;
+            }
+            else
+            {
+                MessageBox.Show("Region field in Config.json has a wrong value. Should be 'EU' or 'US'.",
+                    "Config Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+
+            RealmTextBox.Text = config.Realm;
+            MinGoldScoreTextBox.Text = config.MinGoldScore.ToString();
+        }
+
+        private void GoButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _mainWindowController.DownloadItemData();
+        }
+
+        private void NumberValidation(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

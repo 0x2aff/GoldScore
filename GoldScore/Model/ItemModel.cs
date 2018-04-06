@@ -22,11 +22,9 @@
  * SOFTWARE.
  */
 
-namespace GoldScore
+namespace GoldScore.Model
 {
-    /// <inheritdoc />
-    /// <summary>
-    ///     Interactionlogic for <see cref="App" />.
-    /// </summary>
-    public partial class App { }
+    public class ItemModel
+    {
+    }
 }

@@ -41,5 +41,20 @@ namespace GoldScore.Controller
         {
             _mainWindowView = mainWindowView;
         }
+
+        public Config GetCurrentConfig()
+        {
+            return ConfigManager.Instance.Config;
+        }
+
+        public void DownloadItemData()
+        {
+
+        }
+
+        public void CreateImportList()
+        {
+
+        }
     }
 }
