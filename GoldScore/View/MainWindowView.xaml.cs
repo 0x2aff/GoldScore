@@ -24,7 +24,9 @@
 
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using GoldScore.Controller;
 
 namespace GoldScore.View
@@ -36,10 +38,6 @@ namespace GoldScore.View
     public partial class MainWindowView : IMainWindowView
     {
         private readonly MainWindowController _mainWindowController;
-
-        private static string _colorGrey = "#FF818181";
-        private static string _colorError = "#FFF01E1E";
-        private static string _colorSuccess = "#FF176C36";
 
         /// <inheritdoc />
         /// <summary>
@@ -79,9 +77,60 @@ namespace GoldScore.View
             MinGoldScoreTextBox.Text = config.MinGoldScore.ToString();
         }
 
-        private void GoButtonClicked(object sender, RoutedEventArgs e)
+        private async void GoButtonClicked(object sender, RoutedEventArgs e)
         {
-            _mainWindowController.DownloadItemData();
+            var config = _mainWindowController.GetCurrentConfig();
+
+            var tsmApiKey = TsmKeyTextBox.Text;
+            var realm = RealmTextBox.Text;
+            var minGoldScore = MinGoldScoreTextBox.Text;
+
+            if (config.Region.Equals("EU") && !config.Region.Equals("US"))
+            {
+                _mainWindowController.SaveCurrentConfig(tsmApiKey, "EU", realm, minGoldScore);
+            }
+            else if (!config.Region.Equals("EU") && config.Region.Equals("US"))
+            {
+                _mainWindowController.SaveCurrentConfig(tsmApiKey, "US", realm, minGoldScore);
+            }
+            else
+            {
+                MessageBox.Show("Something went wrong.", "Config Save Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+
+            var downloadResult = await _mainWindowController.DownloadItemData();
+
+            if (downloadResult)
+            {
+                var result = _mainWindowController.CreateImportList();
+                if (result)
+                {
+                    StatusLabel.Content = "Successful: Created Imports.txt";
+                    StatusLabel.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    StatusLabel.Content =
+                        "Something went wrong. Check your input for TSM API Key and Realm and try again.";
+                    StatusLabel.Foreground = Brushes.Red;
+                }
+            }
+            else
+            {
+                StatusLabel.Content = "Something went wrong. Check your input for TSM API Key and Realm and try again.";
+                StatusLabel.Foreground = Brushes.Red;
+            }
+        }
+
+
+        private void InputChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TsmKeyTextBox.Text.Length > 0 && RealmTextBox.Text.Length > 0 && MinGoldScoreTextBox.Text.Length > 0)
+                GoButton.IsEnabled = true;
+            else
+                GoButton.IsEnabled = false;
         }
 
         private void NumberValidation(object sender, TextCompositionEventArgs e)

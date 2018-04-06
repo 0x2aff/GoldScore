@@ -28,5 +28,7 @@ namespace GoldScore
     /// <summary>
     ///     Interactionlogic for <see cref="App" />.
     /// </summary>
-    public partial class App { }
+    public partial class App
+    {
+    }
 }

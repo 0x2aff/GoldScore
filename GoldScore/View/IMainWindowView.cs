@@ -26,6 +26,5 @@ namespace GoldScore.View
 {
     public interface IMainWindowView
     {
-        
     }
 }

@@ -32,7 +32,8 @@
     <Grid>
         <Label Content="TSM API Key" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                FontWeight="Bold" />
-        <TextBox x:Name="TsmKeyTextBox" Margin="10,36,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" />
+        <TextBox x:Name="TsmKeyTextBox" Margin="10,36,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
+                 TextChanged="InputChanged" />
         <Label Content="Region" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" FontWeight="Bold" />
 
         <RadioButton x:Name="EuRadioButton" Content="EU" HorizontalAlignment="Left" Margin="9,90,0,0"
@@ -43,19 +44,20 @@
         <Label Content="Realm" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" FontWeight="Bold" />
         <Label Content="(lowercase with spaces replaced by a dash and no special characters)"
                HorizontalAlignment="Left" Margin="10,159,0,0" VerticalAlignment="Top" FontSize="10" />
-        <TextBox x:Name="RealmTextBox" Margin="11,141,9,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" />
+        <TextBox x:Name="RealmTextBox" Margin="11,141,9,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="InputChanged" />
 
         <Label Content="Min Gold Score" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"
                FontWeight="Bold" />
         <TextBox x:Name="MinGoldScoreTextBox" Margin="10,218,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
-                 PreviewTextInput="NumberValidation" />
+                 PreviewTextInput="NumberValidation" TextChanged="InputChanged" />
 
         <Label Content="Status" HorizontalAlignment="Left" Margin="11,241,0,0" VerticalAlignment="Top"
                FontWeight="Bold" />
         <Label x:Name="StatusLabel" Content="None" HorizontalAlignment="Left" Margin="11,272,0,0"
                VerticalAlignment="Top" Foreground="#FF818181" />
 
-        <Button Content="Go" Margin="10,330,9,42" FontWeight="Bold" IsEnabled="False" Click="GoButtonClicked" />
+        <Button x:Name="GoButton" Content="Go" Margin="10,330,9,42" FontWeight="Bold" IsEnabled="False"
+                Click="GoButtonClicked" />
 
         <Label Content="https://www.reddit.com/user/exceptionptr/" HorizontalAlignment="Left" Margin="10,0,0,10"
                VerticalAlignment="Bottom" FontSize="10" />
