@@ -22,13 +22,10 @@
  * SOFTWARE.
  */
 
-namespace GoldScore
+namespace GoldScore.View
 {
-    /// <inheritdoc />
-    /// <summary>
-    ///     Interactionlogic for <see cref="T:GoldScore.App" />.
-    /// </summary>
-    public partial class App
+    public interface IMainWindowView
     {
+        
     }
 }

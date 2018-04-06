@@ -22,13 +22,24 @@
  * SOFTWARE.
  */
 
-namespace GoldScore
+using GoldScore.View;
+
+namespace GoldScore.Controller
 {
-    /// <inheritdoc />
     /// <summary>
-    ///     Interactionlogic for <see cref="T:GoldScore.App" />.
+    ///     Controller for <see cref="MainWindowView" />.
     /// </summary>
-    public partial class App
+    public class MainWindowController
     {
+        private IMainWindowView _mainWindowView;
+
+        /// <summary>
+        ///     Instantiates a new instance of <see cref="MainWindowController" />
+        /// </summary>
+        /// <param name="mainWindowView"></param>
+        public MainWindowController(IMainWindowView mainWindowView)
+        {
+            _mainWindowView = mainWindowView;
+        }
     }
 }
