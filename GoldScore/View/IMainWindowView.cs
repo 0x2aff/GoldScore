@@ -26,5 +26,7 @@ namespace GoldScore.View
 {
     public interface IMainWindowView
     {
+        void SetErrorMessage(string message);
+        void SetSuccessfulMessage(string message);
     }
 }

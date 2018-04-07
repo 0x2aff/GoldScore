@@ -39,7 +39,7 @@ namespace GoldScore.Controller
     /// </summary>
     public class MainWindowController
     {
-        private IMainWindowView _mainWindowView;
+        private readonly IMainWindowView _mainWindowView;
 
         public List<ItemModel> ItemList = new List<ItemModel>();
 
@@ -69,12 +69,15 @@ namespace GoldScore.Controller
         /// <param name="tsmApiKey">TradeSkillMaster API Key.</param>
         /// <param name="region">Region: EU or US.</param>
         /// <param name="realm">Realm.</param>
+        /// <param name="priceSource">Price Source.</param>
         /// <param name="minGoldScore">Minimum Gold Score.</param>
-        public void SaveCurrentConfig(string tsmApiKey, string region, string realm, string minGoldScore)
+        public void SaveCurrentConfig(string tsmApiKey, string region, string realm, string priceSource,
+            string minGoldScore)
         {
             ConfigManager.Instance.Config.TsmApiKey = tsmApiKey;
             ConfigManager.Instance.Config.Region = region;
             ConfigManager.Instance.Config.Realm = realm;
+            ConfigManager.Instance.Config.PriceSource = priceSource;
             ConfigManager.Instance.Config.MinGoldScore = int.Parse(minGoldScore);
             ConfigManager.Instance.SaveConfig();
         }
@@ -100,11 +103,31 @@ namespace GoldScore.Controller
                 httpClient.BaseAddress = new Uri("http://api.tradeskillmaster.com/v1/item/");
 
                 var tsmDownloadUrl =
-                    $"{GetCurrentConfig().Region}/{GetCurrentConfig().Realm}?format=json&fields=Id%2CRegionMarketAvg%2CRegionAvgDailySold%2CRegionSaleRate&apiKey={GetCurrentConfig().TsmApiKey}";
+                    $"{GetCurrentConfig().Region}/{GetCurrentConfig().Realm}?format=json&fields=Id%2CMarketValue%2CMinBuyout%2CHistoricalPrice%2CRegionMarketAvg" +
+                    $"%2CRegionMinBuyoutAvg%2CRegionHistoricalPrice%2CRegionSaleAvg%2CRegionAvgDailySold%2CRegionSaleRate&apiKey={GetCurrentConfig().TsmApiKey}";
 
                 var response = await httpClient.GetAsync(tsmDownloadUrl);
 
-                if (!response.IsSuccessStatusCode) return false;
+                if (!response.IsSuccessStatusCode)
+                {
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.BadRequest:
+                            _mainWindowView.SetErrorMessage(
+                                "Download error: Check your input for TSM API Key and Realm and try again.");
+                            break;
+                        case HttpStatusCode.InternalServerError:
+                            _mainWindowView.SetErrorMessage(
+                                "Download error: TSM API currently has some problems. Please try again later.");
+                            break;
+                        default:
+                            _mainWindowView.SetErrorMessage(
+                                $"Download error: Something went wrong. Please provide author with following error code: {response.StatusCode.ToString()}");
+                            break;
+                    }
+
+                    return false;
+                }
 
                 var tsmResponseContent = await response.Content.ReadAsStringAsync();
                 File.WriteAllText("TSMData.json", tsmResponseContent);
@@ -117,23 +140,58 @@ namespace GoldScore.Controller
         /// <summary>
         ///     Creates the item import list based on current configuration.
         /// </summary>
-        public bool CreateImportList()
+        public void CreateImportList()
         {
             var importList = string.Empty;
 
             foreach (var item in ItemList)
             {
-                var goldScore = (float) item.RegionMarketAvg / 10000 * item.RegionSaleRate * item.RegionAvgDailySold;
+                var priceSource = GetCurrentConfig().PriceSource;
+                long price;
+
+                switch (priceSource)
+                {
+                    case "MarketValue":
+                        price = item.MarketValue;
+                        break;
+                    case "MinBuyout":
+                        price = item.MinBuyout;
+                        break;
+                    case "HistoricalPrice":
+                        price = item.HistoricalPrice;
+                        break;
+                    case "RegionMarketAvg":
+                        price = item.RegionMarketAvg;
+                        break;
+                    case "RegionMinBuyoutAvg":
+                        price = item.RegionMinBuyoutAvg;
+                        break;
+                    case "RegionHistoricalPrice":
+                        price = item.RegionHistoricalPrice;
+                        break;
+                    case "RegionSaleAvg":
+                        price = item.RegionSaleAvg;
+                        break;
+                    default:
+                        _mainWindowView.SetErrorMessage(
+                            "Error: Did you choose a price source?");
+                        return;
+                }
+
+                var goldScore = (float) price / 10000 * item.RegionSaleRate * item.RegionAvgDailySold;
                 if (goldScore >= GetCurrentConfig().MinGoldScore)
                     importList = importList + "i:" + item.Id + ",";
             }
 
             importList = importList.TrimEnd(',');
 
-            if (importList.Length <= 0) return false;
+            if (importList.Length <= 0)
+                _mainWindowView.SetErrorMessage(
+                    "Import list error: Could not find any item that that an appropiate gold score.");
 
             File.WriteAllText("Imports.txt", importList);
-            return true;
+            _mainWindowView.SetSuccessfulMessage("Successful: Created Imports.txt");
+            ;
         }
     }
 }

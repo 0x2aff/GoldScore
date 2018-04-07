@@ -93,6 +93,7 @@ namespace GoldScore
                 TsmApiKey = string.Empty,
                 Region = "EU",
                 Realm = string.Empty,
+                PriceSource = "MarketValue",
                 MinGoldScore = 1500
             };
 
@@ -103,7 +104,8 @@ namespace GoldScore
 
         private bool CheckConfig()
         {
-            return Config.TsmApiKey != null && Config.Region != null && Config.Realm != null && Config.MinGoldScore > 0;
+            return Config.TsmApiKey != null && Config.Region != null && Config.Realm != null &&
+                   Config.MinGoldScore > 0 && Config.PriceSource != null;
         }
     }
 
@@ -115,6 +117,7 @@ namespace GoldScore
         public string TsmApiKey { get; set; }
         public string Region { get; set; }
         public string Realm { get; set; }
+        public string PriceSource { get; set; }
         public int MinGoldScore { get; set; }
     }
 }

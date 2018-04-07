@@ -74,6 +74,7 @@ namespace GoldScore.View
             }
 
             RealmTextBox.Text = config.Realm;
+            PriceSourceComboBox.Text = config.PriceSource;
             MinGoldScoreTextBox.Text = config.MinGoldScore.ToString();
         }
 
@@ -81,19 +82,26 @@ namespace GoldScore.View
         {
             GoButton.IsEnabled = false;
 
-            var config = _mainWindowController.GetCurrentConfig();
-
             var tsmApiKey = TsmKeyTextBox.Text;
             var realm = RealmTextBox.Text;
             var minGoldScore = MinGoldScoreTextBox.Text;
 
+            if (PriceSourceComboBox.Text == null)
+            {
+                SetErrorMessage("Please choose a price source.");
+                GoButton.IsEnabled = true;
+                return;
+            }
+
+            var priceSource = PriceSourceComboBox.Text;
+
             if (EuRadioButton.IsChecked == true)
             {
-                _mainWindowController.SaveCurrentConfig(tsmApiKey, "EU", realm, minGoldScore);
+                _mainWindowController.SaveCurrentConfig(tsmApiKey, "EU", realm, priceSource, minGoldScore);
             }
             else if (UsRadioButton.IsChecked == true)
             {
-                _mainWindowController.SaveCurrentConfig(tsmApiKey, "US", realm, minGoldScore);
+                _mainWindowController.SaveCurrentConfig(tsmApiKey, "US", realm, priceSource, minGoldScore);
             }
             else
             {
@@ -106,24 +114,7 @@ namespace GoldScore.View
 
             if (downloadResult)
             {
-                var result = _mainWindowController.CreateImportList();
-                if (result)
-                {
-                    StatusLabel.Content = "Successful: Created Imports.txt";
-                    StatusLabel.Foreground = Brushes.Green;
-                }
-                else
-                {
-                    StatusLabel.Content =
-                        $"Create import list: Not able to find a single item that has atleast a GoldScore of {MinGoldScoreTextBox.Text}.";
-                    StatusLabel.Foreground = Brushes.Red;
-                }
-            }
-            else
-            {
-                StatusLabel.Content =
-                    "Downloading API data: Something went wrong. Check your input for TSM API Key and Realm and try again (maximum of 25 times per day).";
-                StatusLabel.Foreground = Brushes.Red;
+                _mainWindowController.CreateImportList();
             }
 
             GoButton.IsEnabled = true;
@@ -142,6 +133,18 @@ namespace GoldScore.View
         {
             var regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        public void SetErrorMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Red;
+        }
+
+        public void SetSuccessfulMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Green;
         }
     }
 }

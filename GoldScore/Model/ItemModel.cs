@@ -27,7 +27,15 @@ namespace GoldScore.Model
     public class ItemModel
     {
         public long Id { get; set; }
+
+        public long MarketValue { get; set; }
+        public long MinBuyout { get; set; }
+        public long HistoricalPrice { get; set; }
         public long RegionMarketAvg { get; set; }
+        public long RegionMinBuyoutAvg { get; set; }
+        public long RegionHistoricalPrice { get; set; }
+        public long RegionSaleAvg { get; set; }
+
         public float RegionAvgDailySold { get; set; }
         public float RegionSaleRate { get; set; }
     }
