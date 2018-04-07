@@ -53,6 +53,48 @@ namespace GoldScore.View
             _mainWindowController = new MainWindowController(this);
         }
 
+        /// <summary>
+        ///     Set status text as an error message.
+        /// </summary>
+        /// <param name="message"></param>
+        public void SetErrorMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Red;
+        }
+
+        /// <summary>
+        ///     Set status text as an success message.
+        /// </summary>
+        /// <param name="message"></param>
+        public void SetSuccessfulMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Green;
+        }
+
+        /// <summary>
+        ///     Set status text as an info message.
+        /// </summary>
+        /// <param name="message"></param>
+        public void SetInfoMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Black;
+        }
+
+        /// <summary>
+        ///     Set the richTextBox content to the specified import list.
+        /// </summary>
+        /// <param name="importList"></param>
+        public void SetImportListBox(string importList)
+        {
+            var flowDoc = new FlowDocument();
+            flowDoc.Blocks.Add(new Paragraph(new Run(importList)));
+
+            ImportRichTextBox.Document = flowDoc;
+        }
+
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             var config = _mainWindowController.GetCurrentConfig();
@@ -149,32 +191,6 @@ namespace GoldScore.View
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
-        }
-
-        public void SetErrorMessage(string message)
-        {
-            StatusLabel.Content = message;
-            StatusLabel.Foreground = Brushes.Red;
-        }
-
-        public void SetSuccessfulMessage(string message)
-        {
-            StatusLabel.Content = message;
-            StatusLabel.Foreground = Brushes.Green;
-        }
-
-        public void SetInfoMessage(string message)
-        {
-            StatusLabel.Content = message;
-            StatusLabel.Foreground = Brushes.Black;
-        }
-
-        public void SetImportListBox(string importList)
-        {
-            var flowDoc = new FlowDocument();
-            flowDoc.Blocks.Add(new Paragraph(new Run(importList)));
-
-            ImportRichTextBox.Document = flowDoc;
         }
     }
 }

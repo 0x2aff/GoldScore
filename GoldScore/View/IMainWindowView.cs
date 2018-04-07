@@ -24,6 +24,9 @@
 
 namespace GoldScore.View
 {
+    /// <summary>
+    ///     Interface for <see cref="MainWindowView"/>
+    /// </summary>
     public interface IMainWindowView
     {
         void SetErrorMessage(string message);

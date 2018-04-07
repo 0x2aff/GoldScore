@@ -24,6 +24,9 @@
 
 namespace GoldScore.Model
 {
+    /// <summary>
+    ///     Represents the item entity.
+    /// </summary>
     public class ItemModel
     {
         public long Id { get; set; }
