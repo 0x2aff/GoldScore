@@ -22,11 +22,14 @@
  * SOFTWARE.
  */
 
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using GoldScore.Controller;
 
 namespace GoldScore.View
@@ -82,6 +85,10 @@ namespace GoldScore.View
         {
             GoButton.IsEnabled = false;
 
+            ImportRichTextBox.Document.Blocks.Clear();
+
+            SetInfoMessage("Preparing ...");
+
             var tsmApiKey = TsmKeyTextBox.Text;
             var realm = RealmTextBox.Text;
             var minGoldScore = MinGoldScoreTextBox.Text;
@@ -110,10 +117,13 @@ namespace GoldScore.View
                 Application.Current.Shutdown();
             }
 
+            SetInfoMessage("Downloading ...");
+
             var downloadResult = await _mainWindowController.DownloadItemData();
 
             if (downloadResult)
             {
+                SetInfoMessage("Creating import list ...");
                 _mainWindowController.CreateImportList();
             }
 
@@ -135,6 +145,12 @@ namespace GoldScore.View
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void OnRedditLinkClicked(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
         public void SetErrorMessage(string message)
         {
             StatusLabel.Content = message;
@@ -145,6 +161,20 @@ namespace GoldScore.View
         {
             StatusLabel.Content = message;
             StatusLabel.Foreground = Brushes.Green;
+        }
+
+        public void SetInfoMessage(string message)
+        {
+            StatusLabel.Content = message;
+            StatusLabel.Foreground = Brushes.Black;
+        }
+
+        public void SetImportListBox(string importList)
+        {
+            var flowDoc = new FlowDocument();
+            flowDoc.Blocks.Add(new Paragraph(new Run(importList)));
+
+            ImportRichTextBox.Document = flowDoc;
         }
     }
 }

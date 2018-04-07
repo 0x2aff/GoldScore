@@ -28,19 +28,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoldScore.View"
         mc:Ignorable="d"
-        Title="Gold Score" Height="459" Width="600" ResizeMode="CanMinimize" Loaded="WindowLoaded">
+        Title="Gold Score" Height="459" Width="800
+        " ResizeMode="CanMinimize" Loaded="WindowLoaded">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Label Content="TSM API Key" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                FontWeight="Bold" />
-        <TextBox x:Name="TsmKeyTextBox" Margin="10,36,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
+        <TextBox Grid.Column="0" x:Name="TsmKeyTextBox" Margin="10,36,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
                  TextChanged="InputChanged" />
-        <Label Content="Region" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label Grid.Column="0" Content="Region" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" FontWeight="Bold" />
 
-        <RadioButton x:Name="EuRadioButton" Content="EU" HorizontalAlignment="Left" Margin="9,90,0,0"
+        <RadioButton Grid.Column="0" x:Name="EuRadioButton" Content="EU" HorizontalAlignment="Left" Margin="9,90,0,0"
                      VerticalAlignment="Top" GroupName="RegionRadioButtons" />
-        <RadioButton x:Name="UsRadioButton" Content="US" HorizontalAlignment="Left" Margin="52,90,0,0"
+        <RadioButton Grid.Column="0" x:Name="UsRadioButton" Content="US" HorizontalAlignment="Left" Margin="52,90,0,0"
                      VerticalAlignment="Top" GroupName="RegionRadioButtons" />
-        <ComboBox x:Name="PriceSourceComboBox" Margin="149,83,10,0" VerticalAlignment="Top" IsReadOnly="True">
+        <ComboBox Grid.Column="0" x:Name="PriceSourceComboBox" Margin="96,83,10,0" VerticalAlignment="Top" IsReadOnly="True">
             <Label x:Name="MarketValue" Content="MarketValue"/>
             <Label x:Name="MinBuyout" Content="MinBuyout"/>
             <Label x:Name="HistoricalPrice" Content="HistoricalPrice"/>
@@ -50,27 +55,32 @@
             <Label x:Name="RegionSaleAvg" Content="RegionSaleAvg"/>
         </ComboBox>
 
-        <Label Content="Realm" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-        <Label Content="(lowercase with spaces replaced by a dash and no special characters)"
+        <Label Grid.Column="0" Content="Realm" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label Grid.Column="0" Content="(lowercase with spaces replaced by a dash and no special characters)"
                HorizontalAlignment="Left" Margin="10,159,0,0" VerticalAlignment="Top" FontSize="10" />
-        <TextBox x:Name="RealmTextBox" Margin="11,141,9,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="InputChanged" />
+        <TextBox Grid.Column="0" x:Name="RealmTextBox" Margin="11,141,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="InputChanged" />
 
-        <Label Content="Min Gold Score" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"
+        <Label Grid.Column="0" Content="Min Gold Score" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"
                FontWeight="Bold" />
-        <TextBox x:Name="MinGoldScoreTextBox" Margin="10,218,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
+        <TextBox Grid.Column="0" x:Name="MinGoldScoreTextBox" Margin="10,218,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"
                  PreviewTextInput="NumberValidation" TextChanged="InputChanged" />
 
-        <Label Content="Status" HorizontalAlignment="Left" Margin="11,241,0,0" VerticalAlignment="Top"
-               FontWeight="Bold" />
-        <Label x:Name="StatusLabel" Content="None" HorizontalAlignment="Left" Margin="11,272,0,0"
-               VerticalAlignment="Top" Foreground="#FF818181" />
+        <Button x:Name="GoButton" Content="Go" Margin="10,369,9,31" FontWeight="Bold" IsEnabled="False"
+                Click="GoButtonClicked" Grid.ColumnSpan="2" Grid.Column="0" />
 
-        <Button x:Name="GoButton" Content="Go" Margin="10,330,9,42" FontWeight="Bold" IsEnabled="False"
-                Click="GoButtonClicked" />
+        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom">           
+            <Hyperlink NavigateUri="https://redd.it/8ad97o" RequestNavigate="OnRedditLinkClicked">
+                Reddit Support Thread
+            </Hyperlink>
+        </TextBlock>
 
-        <Label Content="https://www.reddit.com/user/exceptionptr/" HorizontalAlignment="Left" Margin="10,0,0,10"
-               VerticalAlignment="Bottom" FontSize="10" />
-        <Label Content="v.0.0.3" Margin="0,0,10,10" VerticalAlignment="Bottom" FontSize="10"
-               HorizontalAlignment="Right" />
+        <Label Content="v.0.0.4" Margin="0,0,10,10" VerticalAlignment="Bottom" FontSize="10"
+               HorizontalAlignment="Right" Grid.Column="1" />
+
+        <Label Grid.Column="0" Content="Status" HorizontalAlignment="Left" Margin="9,241,0,0" VerticalAlignment="Top"
+            FontWeight="Bold" />
+        <Label x:Name="StatusLabel" Grid.Column="0" Content="None" HorizontalAlignment="Left" Margin="10,267,0,0" VerticalAlignment="Top" />
+
+        <RichTextBox x:Name="ImportRichTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="354" Margin="10,10,0,0" VerticalAlignment="Top" Width="377" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" />
     </Grid>
 </Window>

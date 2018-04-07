@@ -189,9 +189,11 @@ namespace GoldScore.Controller
                 _mainWindowView.SetErrorMessage(
                     "Import list error: Could not find any item that that an appropiate gold score.");
 
-            File.WriteAllText("Imports.txt", importList);
+            // File.WriteAllText("Imports.txt", importList);
+
+            _mainWindowView.SetImportListBox(importList);
+
             _mainWindowView.SetSuccessfulMessage("Successful: Created Imports.txt");
-            ;
         }
     }
 }

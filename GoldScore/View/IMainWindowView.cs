@@ -28,5 +28,8 @@ namespace GoldScore.View
     {
         void SetErrorMessage(string message);
         void SetSuccessfulMessage(string message);
+        void SetInfoMessage(string message);
+
+        void SetImportListBox(string importList);
     }
 }
