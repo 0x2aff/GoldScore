@@ -93,7 +93,7 @@ namespace GoldScore
                 TsmApiKey = string.Empty,
                 Region = "EU",
                 Realm = string.Empty,
-                MinGoldScore = 15000
+                MinGoldScore = 1500
             };
 
             var configFile = JsonConvert.SerializeObject(Config, Formatting.Indented);

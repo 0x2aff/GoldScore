@@ -61,7 +61,7 @@
 
         <Label Content="https://www.reddit.com/user/exceptionptr/" HorizontalAlignment="Left" Margin="10,0,0,10"
                VerticalAlignment="Bottom" FontSize="10" />
-        <Label Content="v.0.0.1" Margin="0,0,10,10" VerticalAlignment="Bottom" FontSize="10"
+        <Label Content="v.0.0.2" Margin="0,0,10,10" VerticalAlignment="Bottom" FontSize="10"
                HorizontalAlignment="Right" />
     </Grid>
 </Window>

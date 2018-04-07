@@ -87,11 +87,11 @@ namespace GoldScore.View
             var realm = RealmTextBox.Text;
             var minGoldScore = MinGoldScoreTextBox.Text;
 
-            if (config.Region.Equals("EU") && !config.Region.Equals("US"))
+            if (EuRadioButton.IsChecked == true)
             {
                 _mainWindowController.SaveCurrentConfig(tsmApiKey, "EU", realm, minGoldScore);
             }
-            else if (!config.Region.Equals("EU") && config.Region.Equals("US"))
+            else if (UsRadioButton.IsChecked == true)
             {
                 _mainWindowController.SaveCurrentConfig(tsmApiKey, "US", realm, minGoldScore);
             }
@@ -115,13 +115,14 @@ namespace GoldScore.View
                 else
                 {
                     StatusLabel.Content =
-                        "Something went wrong. Check your input for TSM API Key and Realm and try again.";
+                        $"Create import list: Not able to find a single item that has atleast a GoldScore of {MinGoldScoreTextBox.Text}.";
                     StatusLabel.Foreground = Brushes.Red;
                 }
             }
             else
             {
-                StatusLabel.Content = "Something went wrong. Check your input for TSM API Key and Realm and try again.";
+                StatusLabel.Content =
+                    "Downloading API data: Something went wrong. Check your input for TSM API Key and Realm and try again (maximum of 25 times per day).";
                 StatusLabel.Foreground = Brushes.Red;
             }
 
